@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- order bean is our business logic bean that creates new orders -->
+  <bean id="websiteBean" class="com.analytic.bean.WebsiteBean"/>
+
+  <bean id="csvConfig" class="org.apache.commons.csv.writer.CSVConfig">
+    <property name="fields">
+      <list>
+        <bean class="org.apache.commons.csv.writer.CSVField">
+          <property name="name" value="date"/>
+        </bean>
+        <bean class="org.apache.commons.csv.writer.CSVField">
+          <property name="name" value="website"/>
+        </bean>
+        <bean class="org.apache.commons.csv.writer.CSVField">
+          <property name="name" value="visits"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+
+    <route>
+      <from uri="file:data?include=.*.csv&amp;delete=true&amp;delay=2000"/>
+      <unmarshal>
+        <csv skipFirstLine="true" delimiter="|" configRef="csvConfig" useMaps="true"/>
+      </unmarshal>
+      <to uri="bean:websiteBean?method=consumeCsvData"/>
+      <log message="${body}"/>
+    </route>
+
+    <route>
+      <from uri="direct:processCsv"/>
+      <unmarshal>
+        <csv skipFirstLine="true" delimiter="|" configRef="csvConfig" useMaps="true"/>
+      </unmarshal>
+      <to uri="bean:websiteBean?method=consumeCsvData"/>
+      <log message="${body}"/>
+    </route>
+
+  </camelContext>
+
+</beans>

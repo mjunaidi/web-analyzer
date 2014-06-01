@@ -1,0 +1,15 @@
+TODO
+====
+
+# Explore Apache FOP for print report to PDF.
+# Fixed context.getRealPath issue when running using webapp-runner.
+# Think about scalability issue. Maybe pre-generate json list of top 100 websites based on dates.
+Utilize column updated to improve performance. Need to configure the admin page.
+# Consider display each website using graph - see HighCharts. (done)
+# Parameterized url using hashbang.
+# Fix chart not correctly resize after go back to the report page.
+# Implemented HighCharts as AngularJS directive.
+# Consider saving some values to localStorage to have persistent view, like theme selection, etc.
+# When viewing in small screen, the toggle button should give a hint like a popup to alert user to see the list.
+# Immediately hide main menu when viewing in smaller screen.
+# Delete confirmation.

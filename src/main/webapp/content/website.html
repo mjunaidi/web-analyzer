@@ -1,0 +1,35 @@
+<div class="row row-offcanvas row-offcanvas-left" ng-init="initWebsitePage()">
+  <div class="col-sm-4 col-md-3 sidebar sidebar-offcanvas">
+    <form role="form">
+      <div class="form-group">
+        <input type="search" 
+          name="findWebsite" 
+          results="5" 
+          ng-model="search" 
+          class="form-control" 
+          placeholder="Search..."
+          ng-change="searchWebsiteName(search)">
+      </div>
+    </form>
+    <ul class="nav nav-sidebar">
+      <li ng-repeat="w in websiteNames | filter:search | orderBy:'name'"
+	      ng-class="getWebsiteNameActive(w.name)">
+	      <a ng-click="updateWebsiteData(w.name)">{{ w.name }} <span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+      </li>
+      <li ng-repeat="w in searchedWebsiteNames | orderBy:'name'"
+        ng-class="getWebsiteNameActive(w.name)">
+        <a ng-click="updateWebsiteData(w.name)">{{ w.name }} <span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+    <!--toggle sidebar button-->
+    <p class="pull-left visible-xs printHidden">
+      <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas" ng-click="showSidebar()" title="toggle sidebar">
+        <i class="glyphicon glyphicon glyphicon-th-list"></i>
+      </button>
+    </p>
+    <div id="websiteDataContainer" ng-hide="websiteData === false"></div>
+  </div>
+</div><!--/row-->

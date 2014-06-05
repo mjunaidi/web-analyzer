@@ -71,6 +71,10 @@ function MainCtrl(Navigation, WebsiteService, Storage, filesService, UserService
   
   $scope.initWebsites = function() {
     $scope.websites = WebsiteService.websites;
+    if ($scope.dateKey)
+      $scope.updateTopWebsites($scope.dateKey);
+    if ($scope.websiteName)
+      $scope.updateWebsiteData($scope.websiteName);
   };
   $scope.initWebsiteNames = function() {
     $scope.websiteNames = WebsiteService.websiteNames;
@@ -188,6 +192,9 @@ function MainCtrl(Navigation, WebsiteService, Storage, filesService, UserService
   $scope.initWebsiteData = function() {
     $scope.websiteName = WebsiteService.websiteName;
     $scope.websiteData = WebsiteService.websiteData;
+    $scope.updateWebsiteDataCharts();
+  };
+  $scope.updateWebsiteDataCharts = function() {
     $scope.updateWebsiteDataChart("#websiteDataContainer", $scope.websiteName, $scope.websiteData, $scope.websiteDataLimit);
   };
   $scope.updateWebsiteData = function(name) {

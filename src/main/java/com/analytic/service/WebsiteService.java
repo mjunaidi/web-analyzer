@@ -18,5 +18,6 @@ public interface WebsiteService {
 	public List<Website> getWebsiteData(String name, int count);
 	public List<String> getWebsiteNames(String name);
 	public List<String> getDateKeys(String dateKey);
+	public void deleteAllWebsites();
 
 }

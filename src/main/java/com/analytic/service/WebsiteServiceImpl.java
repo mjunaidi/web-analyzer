@@ -64,4 +64,22 @@ public class WebsiteServiceImpl implements WebsiteService {
 		return websiteDAO.getDateKeys(dateKey);
 	}
 
+	@Override
+	public void deleteAllWebsites() {
+		List<Website> websites = getWebsites();
+		int max = 1000;
+		int count = 0;
+		while (websites != null && websites.size() > 0) {
+			for (Website website : websites) {
+				deleteWebsite(website.getId());
+			}
+			websites = getWebsites();
+			count++;
+			if (count >= max) {
+				System.err.println("Somehow there is an error happened while deleting all websites.");
+				break;
+			}
+		}
+	}
+
 }

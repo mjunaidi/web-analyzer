@@ -8,8 +8,8 @@
 
   <properties>
     <hibernate.version>4.3.5.Final</hibernate.version>
-    <mysql.connector.version>5.1.30</mysql.connector.version>
-    <sqlite.version>3.7.2</sqlite.version>
+    <h2database.version>1.4.178</h2database.version>
+    <postgresql.version>9.1-901-1.jdbc4</postgresql.version>
     <spring.version>4.0.5.RELEASE</spring.version>
     <spring.security.version>3.2.4.RELEASE</spring.security.version>
     <maven-war-plugin.version>2.4</maven-war-plugin.version>
@@ -33,14 +33,15 @@
       <version>${hibernate.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.xerial</groupId>
-      <artifactId>sqlite-jdbc</artifactId>
-      <version>${sqlite.version}</version>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2database.version}</version>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysql.connector.version}</version>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+      <classifier />
     </dependency>
     <dependency>
       <groupId>commons-dbcp</groupId>

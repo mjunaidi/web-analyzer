@@ -91,6 +91,18 @@ public class WebsiteController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/api/deleteAll", method=RequestMethod.GET)
+	public ModelAndView deleteAllWebsitesApi() {
+		ModelAndView modelAndView = new ModelAndView("ajax");
+		websiteService.deleteAllWebsites();
+		
+		String message = "All websites were successfully deleted.";
+        JsonObject json = new JsonObject();
+        json.addProperty("message", message);
+        modelAndView.addObject("response", json.toString());
+		return modelAndView;
+	}
+	
 	@RequestMapping(value="/api/delete/{id}", method=RequestMethod.GET)
 	public ModelAndView deleteWebsiteApi(@PathVariable Integer id) {
 		ModelAndView modelAndView = new ModelAndView("ajax");

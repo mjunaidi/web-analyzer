@@ -12,4 +12,5 @@ public interface JsonDataService {
 	public JsonData getJsonData(String name);
 	public void deleteJsonData(int id);
 	public List<JsonData> getJsonDataList();
+	public void deleteAllJsonData();
 }

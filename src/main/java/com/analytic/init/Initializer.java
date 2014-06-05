@@ -25,6 +25,7 @@ public class Initializer implements WebApplicationInitializer {
 		if (initialized == null || !INITIALIZED.equals(initialized)) {
 			AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 			ctx.register(WebAppConfig.class);
+			ctx.register(DataSourceConfig.class);
 
 			servletContext.addListener(new ContextLoaderListener(ctx));
 

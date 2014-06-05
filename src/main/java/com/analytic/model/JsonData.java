@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +19,7 @@ public class JsonData {
 	@Column(name = "name", unique = true)
 	private String name;
 	@Column(name = "data")
+	@Lob
 	private String data;
 	private Date updated;
 

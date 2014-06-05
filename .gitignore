@@ -165,5 +165,6 @@ pip-log.txt
 
 # Project-specific
 mydb.db
+mydb*
 data.csv
 src/main/webapp/data

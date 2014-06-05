@@ -91,7 +91,7 @@ public class WebsiteDAOImpl implements WebsiteDAO {
 		Criteria criteria = (Criteria) getCurrentSession()
 				.createCriteria(Website.class)
 				.setProjection(Projections.distinct(Projections.property("name")))
-				.addOrder(Order.desc("visits"))
+				.addOrder(Order.asc("name"))
 				.setMaxResults(MAX);
 		return criteria.list();
 	}

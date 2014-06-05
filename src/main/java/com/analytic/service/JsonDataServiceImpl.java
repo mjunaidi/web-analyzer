@@ -40,4 +40,21 @@ public class JsonDataServiceImpl implements JsonDataService {
 		return jsonDataDAO.getJsonDataList();
 	}
 
+	public void deleteAllJsonData() {
+		List<JsonData> list = getJsonDataList();
+		int max = 1000;
+		int count = 0;
+		while (list != null && list.size() > 0) {
+			for (JsonData data : list) {
+				deleteJsonData(data.getId());
+			}
+			list = getJsonDataList();
+			count++;
+			if (count >= max) {
+				System.err.println("Somehow there is an error happened while deleting all websites.");
+				break;
+			}
+		}
+	}
+
 }

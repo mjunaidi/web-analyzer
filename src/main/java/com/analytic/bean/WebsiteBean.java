@@ -29,6 +29,7 @@ public class WebsiteBean {
 	public final static String WEBSITES_FILENAME = "websites.json";
 	public final static String WEBSITE_NAMES_FILENAME = "websiteNames.json";
 	public final static String DATE_KEYS_FILENAME = "dateKeys.json";
+	public final static String JSON_FILENAME_EXT = ".json";
 
 	public final static int TOP_COUNT = 100;
 	public final static int WEEK_COUNT = 100;
@@ -51,12 +52,20 @@ public class WebsiteBean {
 				Website website = createWebsiteFromMap(map);
 				if (website != null) updatedWebsites.add(website);
 			}
-			generateWebsiteListJsonFile();
-			generateWebsiteNamesJsonFile();
-			generateDateKeysJsonFile();
-			generateDatedReportJsonFiles(updatedWebsites);
-			generateWebsiteJsonFiles(updatedWebsites);
+			updateJsonFiles(updatedWebsites);
 		}
+	}
+	
+	public void updateJsonFiles() {
+		generateWebsiteListJsonFile();
+		generateWebsiteNamesJsonFile();
+		generateDateKeysJsonFile();
+	}
+	
+	public void updateJsonFiles(List<Website> websites) {
+		updateJsonFiles();
+		generateDatedReportJsonFiles(websites);
+		generateWebsiteJsonFiles(websites);
 	}
 
 	/**
@@ -122,7 +131,7 @@ public class WebsiteBean {
 						.createJsonArrayFromWebsites(websites);
 
 				if (array != null) {
-					String fileName = dateKey + ".json";
+					String fileName = dateKey + JSON_FILENAME_EXT;
 					storeAsJsonData(fileName, array);
 				}
 			}
@@ -140,17 +149,22 @@ public class WebsiteBean {
 				List<Website> websites = websiteService.getWebsiteReport(
 						dateKey, TOP_COUNT);
 
-				JsonArray array = JsonUtil.INSTANCE
-						.createJsonArrayFromWebsites(websites);
-
-				if (array != null) {
-					String fileName = dateKey + ".json";
-					storeAsJsonData(fileName, array);
+				if (websites != null && websites.size() > 0) {
+					JsonArray array = JsonUtil.INSTANCE
+							.createJsonArrayFromWebsites(websites);
+	
+					if (array != null) {
+						String fileName = dateKey + JSON_FILENAME_EXT;
+						storeAsJsonData(fileName, array);
+					}
+				} else {
+					String fileName = dateKey + JSON_FILENAME_EXT;
+					deleteJsonData(fileName);
 				}
 			}
 		}
 	}
-	
+
 	private List<String> getDateKeysFromList(List<Website> websites) {
 		if (websites != null && websites.size() > 0) {
 			// get date keys from the website list
@@ -184,7 +198,7 @@ public class WebsiteBean {
 						.createJsonArrayFromWebsites(websites);
 
 				if (array != null) {
-					String fileName = name + ".json";
+					String fileName = name + JSON_FILENAME_EXT;
 					storeAsJsonData(fileName, array);
 				}
 			}
@@ -202,12 +216,17 @@ public class WebsiteBean {
 				List<Website> websites = websiteService.getWebsiteData(name,
 						WEEK_COUNT);
 
-				JsonArray array = JsonUtil.INSTANCE
-						.createJsonArrayFromWebsites(websites);
+				if (websites != null && websites.size() > 0) {
+					JsonArray array = JsonUtil.INSTANCE
+							.createJsonArrayFromWebsites(websites);
 
-				if (array != null) {
-					String fileName = name + ".json";
-					storeAsJsonData(fileName, array);
+					if (array != null) {
+						String fileName = name + JSON_FILENAME_EXT;
+						storeAsJsonData(fileName, array);
+					}
+				} else {
+					String fileName = name + JSON_FILENAME_EXT;
+					deleteJsonData(fileName);
 				}
 			}
 		}
@@ -229,6 +248,13 @@ public class WebsiteBean {
 			return names;
 		}
 		return null;
+	}
+	
+	private void deleteJsonData(String fileName) {
+		JsonData jsonData = jsonDataService.getJsonData(fileName);
+		if (jsonData != null) {
+			jsonDataService.deleteJsonData(jsonData.getId());
+		}
 	}
 
 	private void storeAsJsonData(String name, JsonArray array) {

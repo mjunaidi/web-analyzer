@@ -1,5 +1,6 @@
 package com.analytic.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.analytic.bean.WebsiteBean;
-import com.analytic.model.JsonData;
 import com.analytic.model.Website;
 import com.analytic.service.JsonDataService;
 import com.analytic.service.WebsiteService;
@@ -29,6 +29,9 @@ public class WebsiteController {
 
 	@Autowired
 	private JsonDataService jsonDataService;
+
+	@Autowired
+	private WebsiteBean websiteBean;
 	
 	@RequestMapping(value="/add", method=RequestMethod.GET)
 	public ModelAndView addWebsitePage() {
@@ -91,20 +94,37 @@ public class WebsiteController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/api/delete/{id}", method=RequestMethod.GET)
-	public ModelAndView deleteWebsiteApi(@PathVariable Integer id) {
+	@RequestMapping(value="/api/deleteAll", method=RequestMethod.GET)
+	public ModelAndView deleteAllWebsitesApi() {
 		ModelAndView modelAndView = new ModelAndView("ajax");
-		websiteService.deleteWebsite(id);
+		websiteService.deleteAllWebsites();
 		
-		generateWebsiteListJsonFile();
-		generateWebsiteNamesJsonFile();
-		generateDateKeysJsonFile();
-		
-		String message = "Website was successfully deleted.";
+		String message = "All websites were successfully deleted.";
         JsonObject json = new JsonObject();
         json.addProperty("message", message);
-        json.addProperty("id", id);
         modelAndView.addObject("response", json.toString());
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/api/delete/{id}", method = RequestMethod.GET)
+	public ModelAndView deleteWebsiteApi(@PathVariable Integer id) {
+		ModelAndView modelAndView = new ModelAndView("ajax");
+		Website website = websiteService.getWebsite(id);
+
+		String message;
+		if (website != null) {
+			websiteService.deleteWebsite(id);
+			List<Website> list = new ArrayList<Website>(1);
+			list.add(website);
+			websiteBean.updateJsonFiles(list);
+			message = "Website was successfully deleted.";
+		} else {
+			message = "Invalid website id!.";
+		}
+		JsonObject json = new JsonObject();
+		json.addProperty("message", message);
+		json.addProperty("id", id);
+		modelAndView.addObject("response", json.toString());
 		return modelAndView;
 	}
 	
@@ -134,74 +154,6 @@ public class WebsiteController {
 		}
 		
 		return modelAndView;
-	}
-
-	/**
-	 * Generate list of websites.
-	 */
-	private void generateWebsiteListJsonFile() {
-		List<Website> websites = websiteService.getWebsites();
-
-		if (websites != null && websites.size() > 0) {
-
-			JsonArray array = JsonUtil.INSTANCE
-					.createJsonArrayFromWebsites(websites);
-
-			if (array != null) {
-				storeAsJsonData(WebsiteBean.WEBSITES_FILENAME, array);
-			}
-		}
-	}
-
-	/**
-	 * Generate list of website names.
-	 */
-	private void generateWebsiteNamesJsonFile() {
-		List<String> names = websiteService.getWebsiteNames();
-
-		if (names != null && names.size() > 0) {
-
-			JsonArray array = JsonUtil.INSTANCE.createJsonArrayFromList(names,
-					"name");
-
-			if (array != null) {
-				storeAsJsonData(WebsiteBean.WEBSITE_NAMES_FILENAME, array);
-			}
-		}
-	}
-
-	/**
-	 * Generate list of date keys.
-	 */
-	private void generateDateKeysJsonFile() {
-		List<String> dateKeys = websiteService.getDateKeys();
-
-		JsonArray array = JsonUtil.INSTANCE
-				.createJsonArrayFromDateKeys(dateKeys);
-
-		if (array != null) {
-			storeAsJsonData(WebsiteBean.DATE_KEYS_FILENAME, array);
-		}
-	}
-
-	private void storeAsJsonData(String name, JsonArray array) {
-		JsonData jsonData = new JsonData();
-		jsonData.setName(name);
-		jsonData.setData(array.toString());
-		saveOrUpdateJsonData(jsonData);
-	}
-
-	private void saveOrUpdateJsonData(JsonData jsonData) {
-		JsonData existing = jsonDataService.getJsonData(jsonData.getName());
-		if (existing == null) {
-			jsonDataService.addJsonData(jsonData);
-		} else {
-			// if exist, then update
-			if (!existing.getData().equals(jsonData.getData())) {
-				existing.setData(jsonData.getData());
-				jsonDataService.updateJsonData(existing);
-			}
-		}
 	}
 
 }

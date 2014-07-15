@@ -117,7 +117,6 @@ public class FileUploadController {
 	public ModelAndView uploadForm() {
 		ModelAndView modelAndView = new ModelAndView("fileUpload");
 		modelAndView.addObject("fileUpload", new FileUpload());
-		modelAndView.addObject("uploadedFiles", getUploadedFiles());
 		return modelAndView;
 	}
 

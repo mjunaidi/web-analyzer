@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.analytic.model.JsonData;
 import com.analytic.service.JsonDataService;
+import com.google.gson.JsonObject;
 
 @Controller
 public class DataController {
@@ -33,6 +34,18 @@ public class DataController {
 		} else {
 			modelAndView.addObject("response", "");
 		}
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/jsonData/api/deleteAll", method=RequestMethod.GET)
+	public ModelAndView deleteAllJsonDataApi() {
+		ModelAndView modelAndView = new ModelAndView("ajax");
+		jsonDataService.deleteAllJsonData();
+		
+		String message = "All json data was successfully deleted.";
+        JsonObject json = new JsonObject();
+        json.addProperty("message", message);
+        modelAndView.addObject("response", json.toString());
 		return modelAndView;
 	}
 

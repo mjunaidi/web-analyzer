@@ -20,6 +20,7 @@
   <link href="css/dashboard.css" rel="stylesheet">
   <link href="css/dashboard-offcanvas.css" rel="stylesheet">
   <link href="css/override.css" rel="stylesheet">
+  <link href="css/animation.css" rel="stylesheet">
   <link href="css/print.css" rel="stylesheet" media="print">
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

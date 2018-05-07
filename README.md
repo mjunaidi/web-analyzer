@@ -31,3 +31,21 @@ To check running dyno
 
 In case cannot push after commit, use force push
     `git remote origin master -f`
+
+Find Bugs/Find Sec Bugs commands
+================================
+
+The project has been integrated with [Find Sec Bugs](https://github.com/find-sec-bugs/find-sec-bugs/wiki/Maven-configuration).
+
+To scan
+```
+mvn compile
+mvn findbugs:findbugs
+```
+
+Analyzing the result
+```
+mvn findbugs:gui
+```
+
+An XML report is also generated at `target/findbugsXml.xml`. This file format can be read by **Jenkins**.

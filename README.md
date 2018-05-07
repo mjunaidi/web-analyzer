@@ -49,3 +49,11 @@ mvn findbugs:gui
 ```
 
 An XML report is also generated at `target/findbugsXml.xml`. This file format can be read by **Jenkins**.
+
+Notes
+=====
+* Possible solution for a Java warning:
+```
+[java] WARNING: Could not open/create prefs root node Software\JavaSoft\Pre fs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+```
+[StackOverflow](https://stackoverflow.com/questions/16428098/groovy-shell-warning-could-not-open-create-prefs-root-node)
